@@ -4,8 +4,6 @@ from fastapi import FastAPI, Query
 app = FastAPI(title="DevSecOps Vulnerable Demo App")
 
 # 1. HARDCODED SECRET (Vulnerability #1)
-# Developers often accidentally commit API keys to GitHub.
-# Gitleaks should catch this pattern.
 AWS_DEMO_SECRET = os.getenv("AWS_DEMO_SECRET", "default_safe_value")
 
 @app.get("/")
@@ -15,9 +13,6 @@ def home():
 @app.get("/search")
 def search_user(username: str = Query(...)):
     # 2. SQL INJECTION (Vulnerability #2)
-    # Concatenating raw user input directly into an SQL string instead of 
-    # using parameterized queries ('?') allows an attacker to dump the database.
-    # Semgrep (SAST) should catch this pattern.
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
     
