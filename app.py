@@ -6,7 +6,7 @@ app = FastAPI(title="DevSecOps Vulnerable Demo App")
 # 1. HARDCODED SECRET (Vulnerability #1)
 # Developers often accidentally commit API keys to GitHub.
 # Gitleaks should catch this pattern.
-AWS_DEMO_SECRET = "AKIAIOSFODNN7EXAMPLE_SECRET_KEY_12345"
+AWS_DEMO_SECRET = os.getenv("AWS_DEMO_SECRET", "default_safe_value")
 
 @app.get("/")
 def home():
