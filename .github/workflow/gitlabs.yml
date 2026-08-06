@@ -1,4 +1,4 @@
-name: DevSecOps CI/CD Gatekeeper
+name: gitlabs CI/CD Gatekeeper
 
 
 on:
