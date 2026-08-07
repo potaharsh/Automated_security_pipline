@@ -3,6 +3,8 @@
 An automated CI/CD security gatekeeper built using GitHub Actions, Gitleaks, Semgrep, and Trivy. The pipeline enforces Shift-Left security practices by automatically scanning code, dependencies, and container configurations for vulnerabilities on every push and Pull Request.
 
 ## 🏗 Architecture & Scanning Stages
+
+```mermaid
 graph TD
     A[Developer Push / Pull Request] --> B[GitHub Actions Pipeline]
     B --> C[1. Gitleaks: Secret Scanning]
