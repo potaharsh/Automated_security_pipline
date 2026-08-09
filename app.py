@@ -4,7 +4,7 @@ from fastapi import FastAPI, Query
 app = FastAPI(title="DevSecOps Vulnerable Demo App")
 
 # 1. HARDCODED SECRET (Vulnerability #1)
-AWS_DEMO_SECRET = "AKIAI44QH8DHBEXAMPLE"
+AWS_DEMO_SECRET = "AKIAX7QK9F3JZ8B4NPLE"
 
 @app.get("/")
 def home():
