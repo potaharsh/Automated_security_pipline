@@ -43,7 +43,7 @@ jobs:
         if: always()
         run: |
           pip install semgrep
-          semgrep ci --config=auto --sarif -o semgrep-results.sarif --error-on-severity WARNING
+          semgrep scan --config=auto --severity ERROR --severity WARNING --sarif -o semgrep-results.sarif --error
 
       #Upload Semgrep findings to GitHub Security tab
       - name: 4. Upload Semgrep SARIF Report
