@@ -1,11 +1,10 @@
-import os
 import sqlite3
 from fastapi import FastAPI, Query
 
-app = FastAPI(title="DevSecOps Secure Demo App")
+app = FastAPI(title="DevSecOps Vulnerable Demo App")
 
-# Secret loaded from environment, not hardcoded
-AWS_DEMO_SECRET = os.getenv("AWS_DEMO_SECRET", "default_safe_value")
+# Hardcoded secret — will trigger Gitleaks (aws-access-token rule)
+AWS_DEMO_SECRET = "AKIAX7QK9F3JZ8B4NPLE"
 
 @app.get("/")
 def home():
@@ -15,10 +14,7 @@ def home():
 def search_user(username: str = Query(...)):
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
-    try:
-        # Parameterized query — prevents SQL injection
-        query = "SELECT * FROM users WHERE username = ?"
-        cursor.execute(query, (username,))
-        return {"users": cursor.fetchall()}
-    finally:
-        conn.close()
+    # SQL injection via f-string — will trigger Semgrep
+    query = f"SELECT * FROM users WHERE username = '{username}'"
+    cursor.execute(query)
+    return {"users": cursor.fetchall()}
