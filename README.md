@@ -10,8 +10,6 @@ graph TD
     B --> C[1. Gitleaks: Secret Scanning]
     B --> D[2. Semgrep: SAST Code Analysis]
     B --> E[3. Trivy: SCA & Container Scan]
-    C <--> D
-    D <--> E
     C --> F[GitHub Security Tab / SARIF]
     D --> F
     E --> F
