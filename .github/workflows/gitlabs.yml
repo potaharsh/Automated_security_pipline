@@ -43,7 +43,7 @@ jobs:
         if: always()
         run: |
           pip install semgrep
-          semgrep scan --config=auto --severity ERROR --severity WARNING --sarif -o semgrep-results.sarif --error
+          semgrep scan --config=auto --severity ERROR --severity WARNING --sarif -o semgrep-results.sarif
 
       #Upload Semgrep findings to GitHub Security tab
       - name: 4. Upload Semgrep SARIF Report
@@ -53,6 +53,27 @@ jobs:
           sarif_file: 'semgrep-results.sarif'
           category: 'semgrep'
         continue-on-error: true
+      - name: 4b. Gate on Semgrep Findings
+        if: always()
+        run: |
+                  python3 -c "
+                  import json, sys
+                  with open('semgrep-results.sarif') as f:
+                      data = json.load(f)
+                  results = data['runs'][0]['results']
+                  count = len(results)
+                  if count > 0:
+                      print(f'❌ Semgrep found {count} finding(s) at WARNING/ERROR severity. Blocking pipeline.')
+                      for r in results:
+                          rule = r.get('ruleId', 'unknown-rule')
+                          loc = r.get('locations', [{}])[0].get('physicalLocation', {})
+                          path = loc.get('artifactLocation', {}).get('uri', 'unknown-file')
+                          line = loc.get('region', {}).get('startLine', '?')
+                          print(f'  - [{rule}] {path}:{line}')
+                      sys.exit(1)
+                  else:
+                      print('✅ No blocking Semgrep findings.')
+                  "
       #Scan dependencies and container image for known CVEs
       - name: 5. Container & Dependency Scan (Trivy)
         if: always()
